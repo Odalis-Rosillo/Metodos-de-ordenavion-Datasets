@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 public abstract class DatasetGenerator {
 
-    protected static final String BASE_PATH = "src/datasets/";
+    protected static final String BASE_PATH = "Metdos/src/datasets/";
 
     protected void escribirCSV(String filename, String contenido) throws IOException {
 
