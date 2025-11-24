@@ -8,9 +8,7 @@ public class Benchmark {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("______________________________________________________");
-        System.out.println("benchmark de ordenamiento");
-        System.out.println("______________________________________________________\n");
+        System.out.println("BENCHMARK DE ORDENAMIENTO");
 
         //se carga los datasets
 
@@ -33,10 +31,19 @@ public class Benchmark {
         imprimirResultados("Pacientes 500 (duplicados)", arrPacientes);
         imprimirResultados("Inventario 500 inverso", arrInventario);
 
-        System.out.println("=====================================================");
+        System.out.println("--------------------------------------------------");
     }
 
     //para imprimir los resultados
+
+    private static void imprimirResultados(String titulo, long[] base) {
+        int[] baseInt = new int[base.length];
+        for (int i = 0; i < base.length; i++) {
+            baseInt[i] = (int) (base[i] % Integer.MAX_VALUE);
+        }
+        imprimirResultados(titulo, baseInt);
+    }
+
 
     private static void imprimirResultados(String titulo, int[] base) {
         System.out.println("\n--- " + titulo + " ---");
@@ -59,13 +66,4 @@ public class Benchmark {
                 "Selection", selection.comparisons, selection.swaps, selection.tiempoNs);
     }
 
-    private static void imprimirResultados(String titulo, long[] base) {
-        System.out.println("\n--- " + titulo + " ---");
-
-        // Convertimos long[] → int[] porque los algoritmos usan int[]
-        int[] baseInt = new int[base.length];
-        for (int i = 0; i < base.length; i++) baseInt[i] = (int) (base[i] % Integer.MAX_VALUE);
-
-        imprimirResultados(titulo, baseInt);
-    }
 }

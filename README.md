@@ -1,42 +1,125 @@
-# Métodos De Ordenación
-Este es un proyecto Java que implementa tres algoritmos clásicos de ordenación: Insertion Sort, Bubble Sort y Selection Sort. Desarrollado como parte del Taller 5 de Estructura de Datos, incluye un sistema de trazas para visualizar el proceso de ordenación paso a paso. 
-# Características Principales
-Algoritmos Implementados
-* InsertionSort: Ordena insertando elementos en su posición correcta
-* BubbleSort: Ordena mediante intercambios adyacentes con corte temprano
-* SelectionSort: Ordena seleccionando el mínimo elemento en cada iteración
-# Requisitos Previos
-* Java JDK 17 o superior
-* Git para control de versiones
-* IDE: IntelliJ IDEA, VS Code o cualquier editor Java
-# Instalación
-* Clona o descarga este repositorio en tu máquina local.
-* Abrir el proyecto en tu IDE:
-  * Importa como proyecto Java existente
-  * Configura el JDK si es necesario
-# Ejecución Básica
-* Compila y ejecuta la clase principal sortingDemo
-# Decisiones de Diseño 
-Para la resolución de este taller, se opoto por seguir las siguientes decisiones de diseño: 
-* Crear un paquete llamado métodos
-  En este paquete va la lógica de algoritmos:
-   * InsertionSort.java
-   * BubbleSort.java
-   * SelectionSort.java
-* Crea un paquete llamado servicios
-  En este paquete van las pruebas con las clases:
-   * SortingDemo.java
-   * SortingUtils.java
-* Realizar la sobrecaraga de métodos sort(array) y sort(array, true) para trazas
-# Flujo de uso
-* El programa ejecuta automáticamente los 3 algoritmos con 5 datasets diferentes
-* Muestra el proceso paso a paso para cada algoritmo
-* Incluye arrays iniciales, iteraciones intermedias y resultados finales
-# Casos Bordes 
-Los casos bordes que se manejan son: 
-* Array vacío	[]	: Retorna inmediatamente
-* Un elemento	[5]	: Considerado ordenado
-* Ya ordenado	[1,2,3,4,5]	: Eficiencia optimizada
-* Orden inverso	[5,4,3,2,1]	: Peor caso de rendimiento
-* Elementos iguales	[2,2,2,2]	: Mantiene estabilidad
-* Array null	null	: Manejo seguro de errores
+# DATASETS PARA BENCHMARK DE ORDENAMIENTO
+
+### Integrantes: Odalis Rosillo & Richard Cajas
+
+### Proyecto: Comparación de Métodos de Ordenación
+
+-------------------------------------------
+#1. CARACTERÍSTICAS GENERALES
+-------------------------------------------
+- Formato de archivo: CSV
+- Codificación: UTF-8 (sin BOM)
+- Separador de campos: punto y coma (;)
+- Todos los archivos incluyen encabezado en la primera fila.
+- Todos los datasets se generan con semilla fija:
+  ▸ Semilla aleatoria utilizada: 42
+  Esto garantiza reproducibilidad.
+
+-------------------------------------------
+#2. LISTA DE ARCHIVOS GENERADOS
+-------------------------------------------
+1) citas_100.csv
+2) citas_100_casi_ordenadas.csv
+3) pacientes_500.csv
+4) inventario_500_inverso.csv
+
+Ubicación de archivos:
+Metodos de ordenacion Datasets/src/datasets/
+
+-------------------------------------------
+#3. DESCRIPCIÓN DE CADA DATASET
+-------------------------------------------
+
+--------------------------------------------------
+3.1. citas_100.csv
+--------------------------------------------------
+Tamaño: 100 registros  
+Campos: id;apellido;fechaHora  
+Formato ID: CITA-001 … CITA-100  
+Apellidos: tomados de un pool de 30 apellidos comunes (duplicados permitidos).  
+Fecha y hora: generadas aleatoriamente entre:
+▸ Fecha: 2025-03-01 y 2025-03-31
+▸ Hora: entre 08:00 y 18:00
+▸ Minutos: múltiplos de 10 (00,10,...50)
+Distribución completamente aleatoria con semilla 42.
+
+Ejemplo:
+id;apellido;fechaHora
+CITA-001;Guerrero;2025-03-05T10:40
+CITA-002;Naranjo;2025-03-22T08:20
+
+--------------------------------------------------
+3.2. citas_100_casi_ordenadas.csv
+--------------------------------------------------
+Generado a partir de citas_100.csv, pero ordenado por fechaHora ascendente.
+
+Luego se aplican exactamente 5 swaps pseudoaleatorios entre pares de filas:
+▸ Equivale al 5% del total (requisito)
+▸ No se repite ninguna pareja
+▸ Semilla del generador aleatorio: 42
+
+Esto produce un archivo "casi ordenado", ideal para favorecer InsertionSort.
+
+Propósito: analizar rendimiento en datos casi ordenados.
+
+--------------------------------------------------
+3.3. pacientes_500.csv
+--------------------------------------------------
+Tamaño: 500 registros  
+Campos: id;apellido;prioridad  
+Formato ID: PAC-0001 … PAC-0500  
+Apellidos: generados con sesgo estadístico:
+▸ 60% comunes
+▸ 30% medios
+▸ 10% raros
+Semilla: 42
+Esto asegura gran cantidad de apellidos duplicados (útil para probar estabilidad).
+
+Prioridad: entero en {1,2,3}, aleatorio con semilla 42.
+
+Ejemplo:
+id;apellido;prioridad
+PAC-0001;Ramirez;1
+PAC-0002;Ramirez;3
+
+--------------------------------------------------
+3.4. inventario_500_inverso.csv
+--------------------------------------------------
+Tamaño: 500 registros  
+Campos: id;insumo;stock  
+Formato ID: ITEM-0001 … ITEM-0500  
+Insumo: nombres sintéticos realistas (rotan cada 10 ítems).  
+Stock: valores estrictamente descendentes desde 500 hasta 1.
+
+Propósito: simular caso completamente inverso al orden natural,
+útil para comparar rendimiento de algoritmos cuando los datos
+están en el peor estado para algunos métodos (Insertion y Bubble).
+
+Ejemplo:
+
+* ITEM-0001;Guante Nitrilo Talla M;500
+
+* ITEM-0002;Alcohol 70% 1L;499
+
+* ITEM-0003;Gasas 10x10;498
+
+-------------------------------------------
+#4. VALIDACIÓN FINAL
+-------------------------------------------
+Generación de 4 archivos  con nombres exactos.
+
+Formato CSV con codificación UTF-8 y separador ;
+
+Semilla fija = 42 en todos los generadores.
+
+citas_100_casi_ordenadas.csv aplica 5 swaps exactos.
+
+pacientes_500.csv contiene duplicados abundantes.
+
+inventario_500_inverso.csv estrictamente descendente.
+
+No hay filas vacías ni caracteres inválidos.
+
+No se mezclan punto y coma dentro de los datos (reemplazado si aparece).
+
+
